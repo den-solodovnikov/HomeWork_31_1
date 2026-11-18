@@ -11,7 +11,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
 
-CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGINS_1'), os.getenv('CSRF_TRUSTED_ORIGINS_2')]
+CSRF_TRUSTED_ORIGINS = [
+    os.getenv("CSRF_TRUSTED_ORIGINS_1"),
+    os.getenv("CSRF_TRUSTED_ORIGINS_2"),
+]
 
 ALLOWED_HOSTS = []
 
@@ -23,7 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "users",
+    "user",
     "lessons",
 ]
 
@@ -102,4 +105,4 @@ MAILERS = {
     },
 }
 
-AUTH_USER_MODEL = "users.Users"
+AUTH_USER_MODEL = "user.User"
