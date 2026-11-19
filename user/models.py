@@ -3,7 +3,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 
-class Users(AbstractUser):
+class User(AbstractUser):
     username = None
     email = models.EmailField(
         unique=True, verbose_name="Email-адрес", help_text="Укажите адрес email"
