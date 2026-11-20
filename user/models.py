@@ -1,10 +1,28 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+
+from lessons.models import Course, Lesson
 
 
 class User(AbstractUser):
     username = None
+    first_name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Имя",
+        help_text="Введите имя",
+    )
+    last_name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Фамилия",
+        help_text="Введите фамилию",
+    )
+
     email = models.EmailField(
         unique=True, verbose_name="Email-адрес", help_text="Укажите адрес email"
     )
@@ -37,3 +55,36 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.email}"
+
+
+class Payment(models.Model):
+    class Method(models.TextChoices):
+        CASH = "cash", "Наличные"
+        TRANSFER = "transfer", "Перевод на счет"
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    payment_date = models.DateTimeField()
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+    )
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+    )
+    amount = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
+        default=0,
+        validators=[MinValueValidator(0)],
+    )
+    payment_method = models.CharField(
+        max_length=20,
+        choices=Method.choices,
+        default=Method.CASH,
+        verbose_name="Способ оплаты",
+        help_text="Выберите способ оплаты",
+    )

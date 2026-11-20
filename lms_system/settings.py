@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "user",
     "lessons",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "lms_system.wsgi.application"
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+}
 
 DATABASES = {
     "default": {
