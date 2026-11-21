@@ -1,0 +1,56 @@
+[
+  {
+    "model": "user.User",
+    "pk": 1,
+    "fields": {
+      "first_name": "Иван",
+      "last_name": "Иванов",
+      "email": "ivanov@example.com",
+      "phone": "+72221121122",
+      "city": "Краснодар",
+      "avatar": null,
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false
+    }
+  },
+  {
+    "model": "user.User",
+    "pk": 2,
+    "fields": {
+      "first_name": "Петр",
+      "last_name": "Петров",
+      "email": "petrov@example.com",
+      "phone": "+78983321122",
+      "city": "Москва",
+      "avatar": null,
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false
+    }
+  },
+  {
+    "model": "user.Payment",
+    "pk": 1,
+    "fields": {
+      "user": "1",
+      "payment_date": "2026-11-11 10:00",
+      "course": "2",
+      "lesson": "1",
+      "amount": "5000",
+      "payment_method": "cash"
+    }
+  },
+  {
+    "model": "user.Payment",
+    "pk": 2,
+    "fields": {
+      "user": "2",
+      "payment_date": "2026-11-12 09:00",
+      "course": "2",
+      "lesson": "2",
+      "amount": "6000",
+      "payment_method": "transfer"
+    }
+  }
+]

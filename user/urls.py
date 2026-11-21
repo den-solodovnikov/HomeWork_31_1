@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from user.apps import UsersConfig
-from user.views import UserViewSet
+from user.views import UserViewSet, PaymentListAPIView
 
 # from users.views import (UserCreateAPIView, UserListAPIView, UserUpdateAPIView,
 #                          UserDestroyAPIView, UserRetrieveAPIView, UserViewSet)
@@ -12,6 +12,7 @@ router = DefaultRouter()
 router.register("", UserViewSet, basename="user")
 
 urlpatterns = [
+    path("payments/", PaymentListAPIView.as_view(), name="payments_list"),
     # path("users/", UserListAPIView.as_view(), name="user_list"),
     # path("users/create/", UserCreateAPIView.as_view(), name="user_create"),
     # path("users/<int:pk>/", UserRetrieveAPIView.as_view(), name="users_retrieve"),
