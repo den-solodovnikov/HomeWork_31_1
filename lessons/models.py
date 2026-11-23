@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
@@ -11,6 +12,14 @@ class Course(models.Model):
         help_text="Добавьте изображение",
     )
     description = models.TextField(verbose_name="Описание")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name="Владелец",
+        help_text="Укажите владельца курса"
+    )
 
     def __str__(self):
         return f"{self.title}"
@@ -22,7 +31,7 @@ class Course(models.Model):
 
 class Lesson(models.Model):
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="lessons", verbose_name="Курс"
+        Course, on_delete=models.CASCADE, related_name="lessons", verbose_name="Урок"
     )
     title = models.CharField(max_length=200, verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
@@ -42,6 +51,14 @@ class Lesson(models.Model):
         ],
         blank=True,
         null=True,
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name="Владелец",
+        help_text="Укажите владельца урока"
     )
 
     def __str__(self):
