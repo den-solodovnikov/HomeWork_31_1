@@ -7,22 +7,21 @@ from rest_framework.generics import (
     UpdateAPIView,
     DestroyAPIView,
     RetrieveAPIView,
+    get_object_or_404,
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from user.models import User, Payment
+from lessons.models import Course
+from user.models import User, Payment, Subscribe
 from user.permissions import IsOwnerOrReadOnly
-from user.serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer, UserPublicSerializer
-
-
-# class UserTokenObtainPairView(TokenObtainPairView):
-#     serializer_class = UserTokenObtainPairSerializer
-
-# class UserViewSet(ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
+from user.serializers import (
+    UserSerializer,
+    PaymentSerializer,
+    UserTokenObtainPairSerializer,
+    UserPublicSerializer,
+)
 
 
 class UserCreateAPIView(CreateAPIView):
@@ -34,7 +33,6 @@ class UserCreateAPIView(CreateAPIView):
         user = serializer.save(is_active=True)
         user.set_password(user.password)
         user.save()
-
 
 
 class UserListAPIView(ListAPIView):
@@ -63,9 +61,46 @@ class UserRetrieveAPIView(RetrieveAPIView):
         return UserPublicSerializer
 
 
-class PaymentListAPIView(generics.ListAPIView):
+class PaymentListAPIView(ListAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ("course", "lesson", "payment_method")
-    ordering_fields = ("payment_date",)
+    ordering_fields = ("payment_dateList",)
+
+
+class SubscriptionAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        subscriptions = Subscribe.objects.filter(user=request.user)
+        data = [
+            {
+                "id": sub.id,
+                "course_id": sub.course.id,
+                "user_last_name": sub.user.last_name,
+                "user_first_name": sub.user.first_name,
+                "created_at": sub.created_at,
+            }
+            for sub in subscriptions
+        ]
+        return Response(data)
+
+    def post(self, *args, **kwargs):
+        user = self.request.user
+        course_id = self.request.data.get("course_id")
+        course_item = get_object_or_404(Course, id=course_id)
+
+        subs_item = Subscribe.objects.filter(user=user, course=course_item)
+
+        # Если подписка у пользователя на этот курс есть - удаляем ее
+        if subs_item.exists():
+            subs_item.delete()
+            message = "подписка удалена"
+        # Если подписки у пользователя на этот курс нет - создаем ее
+        else:
+            Subscribe.objects.create(user=user, course=course_item)
+            message = "подписка добавлена"
+
+        # Возвращаем ответ в API
+        return Response({"message": message})

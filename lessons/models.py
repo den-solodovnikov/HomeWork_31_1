@@ -18,7 +18,7 @@ class Course(models.Model):
         blank=True,
         null=True,
         verbose_name="Владелец",
-        help_text="Укажите владельца курса"
+        help_text="Укажите владельца курса",
     )
 
     def __str__(self):
@@ -52,13 +52,19 @@ class Lesson(models.Model):
         blank=True,
         null=True,
     )
+    content = models.TextField(
+        verbose_name="Материал урока",
+        null=True,
+        blank=True,
+        help_text="Введите материал урока",
+    )
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
         verbose_name="Владелец",
-        help_text="Укажите владельца урока"
+        help_text="Укажите владельца урока",
     )
 
     def __str__(self):
