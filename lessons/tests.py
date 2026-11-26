@@ -88,17 +88,16 @@ class SubscriptionTestCase(APITestCase):
     """Тесты функционала подписки на обновления курса."""
 
     def setUp(self):
-        self.user = User.objects.create(email='student@test.com')
+        self.user = User.objects.create(email="student@test.com")
         self.course = Course.objects.create(
-            title='Курс для подписки',
-            description='Описание'
+            title="Курс для подписки", description="Описание"
         )
-        self.url = reverse('user:subscription')
+        self.url = reverse("user:subscription")
 
     def test_subscription_toggle(self):
         """Тест добавления и удаления подписки при повторном запросе."""
         self.client.force_authenticate(user=self.user)
-        data = {'course_id': self.course.pk}
+        data = {"course_id": self.course.pk}
 
         # Подписка оформляется
         response_sub = self.client.post(self.url, data)

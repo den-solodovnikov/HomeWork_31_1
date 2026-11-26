@@ -26,11 +26,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
     "rest_framework",
+    "rest_framework_simplejwt",
+    "django_filters",
     "user",
     "lessons",
-    "django_filters",
-    "rest_framework_simplejwt",
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,5 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = "user.User"
+
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
