@@ -8,21 +8,31 @@ from rest_framework.generics import (
     DestroyAPIView,
 )
 from lessons.models import Course, Lesson
+from lessons.paginators import CoursePagination, LessonPagination
 from lessons.serializers import CourseSerializer, LessonSerializer
-from user.permissions import IsModerator
+from user.permissions import IsModerator, IsOwnerOrReadOnly
 
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    pagination_class = CoursePagination
 
     def get_permissions(self):
-        if self.action in ['create', 'destroy']:
-            self.permission_classes = (IsAuthenticated, ~IsModerator,)
-        elif self.action in ['list', 'retrieve', 'update']:
+        if self.action in ["create", "destroy"]:
+            self.permission_classes = (
+                IsAuthenticated,
+                ~IsModerator,
+            )
+        elif self.action in ["list", "retrieve", "update"]:
             self.permission_classes = (IsModerator,)
-        elif self.action in ['list',]:
-            self.permission_classes = (IsAuthenticated, IsModerator | AllowAny,)
+        elif self.action in [
+            "list",
+        ]:
+            self.permission_classes = (
+                IsAuthenticated,
+                IsModerator | AllowAny,
+            )
         return super().get_permissions()
 
     def perform_create(self, serializer):
@@ -46,21 +56,22 @@ class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | AllowAny]
+    pagination_class = LessonPagination
 
 
 class LessonUpdateAPIView(UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, IsModerator]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrReadOnly]
 
 
 class LessonDestroyAPIView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, ~IsModerator]
+    permission_classes = [IsAuthenticated, ~IsModerator | IsOwnerOrReadOnly]
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, IsModerator]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrReadOnly]

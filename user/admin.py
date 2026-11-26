@@ -5,5 +5,4 @@ from user.models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_filter = ('id', 'first_name', 'last_name', 'email')
-
+    list_filter = ("id", "first_name", "last_name", "email")
