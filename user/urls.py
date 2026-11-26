@@ -5,7 +5,13 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from user.apps import UsersConfig
-from user.views import PaymentListAPIView, UserCreateAPIView, SubscriptionAPIView
+from user.views import (
+    PaymentListAPIView,
+    UserCreateAPIView,
+    SubscriptionAPIView,
+    PaymentCreateAPIView,
+    PaymentStatusAPIView,
+)
 
 from user.views import (
     UserCreateAPIView,
@@ -24,6 +30,12 @@ class SubscriptionListAPIView:
 
 urlpatterns = [
     path("payments/", PaymentListAPIView.as_view(), name="payments_list"),
+    path("payment/create/", PaymentCreateAPIView.as_view(), name="payment_create"),
+    path(
+        "payment/status/<int:pk>/",
+        PaymentStatusAPIView.as_view(),
+        name="payment_status",
+    ),
     path("subscription/", SubscriptionAPIView.as_view(), name="subscription"),
     path("register/", UserCreateAPIView.as_view(), name="register"),
     path(

@@ -90,6 +90,12 @@ class Payment(models.Model):
         verbose_name="Способ оплаты",
         help_text="Выберите способ оплаты",
     )
+    session_id = models.CharField(
+        max_length=255, blank=True, null=True, verbose_name="ID сессии Stripe"
+    )
+    link = models.URLField(
+        max_length=600, blank=True, null=True, verbose_name="Ссылка на оплату"
+    )
 
 
 class Subscribe(models.Model):
